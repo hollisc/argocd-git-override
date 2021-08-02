@@ -1,0 +1,20 @@
+apiVersion: skaffold/v2beta20
+kind: Config
+build:
+  artifacts:
+  - image: argocd-git-override
+    context: nodejs
+profiles:
+- name: dev
+  activation:
+  - command: dev
+  build:
+    artifacts:
+    - image: argocd-git-override
+      context: nodejs
+      sync:
+        infer:
+        - '**/*.js'
+      docker:
+        buildArgs:
+          ENV: development

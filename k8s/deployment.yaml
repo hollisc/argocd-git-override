@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-git-override
+  annotations:
+    app.openshift.io/vcs-ref: main
+    app.openshift.io/vcs-uri: https://github.com/csantanapr/argocd-git-override
+  labels:
+    app: argocd-git-override
+    version: v1
+    app.kubernetes.io/component: argocd-git-override
+    app.kubernetes.io/instance: argocd-git-override
+    app.kubernetes.io/name: argocd-git-override
+    app.kubernetes.io/part-of: argocd-git-override
+    app.openshift.io/runtime: nodejs
+    app.openshift.io/runtime-version: "14"
+spec:
+  selector:
+    matchLabels:
+      app: argocd-git-override
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: argocd-git-override
+        version: v1
+    spec:
+      volumes:
+      - name: certs
+        secret:
+          secretName: argocd-git-override
+      containers:
+        - name: argocd-git-override
+          image: quay.io/csantanapr/argocd-git-override:9d7b64a-dirty@sha256:fa76a711ecc37de77fa03eacfb4f0e64a84da226090d49c95f8e871675a1c369
+          ports:
+            - containerPort: 8443
+              name: https
+          envFrom:
+            - secretRef:
+                name: argocd-git-override
+          volumeMounts:
+          - name: certs
+            mountPath: "/certs"
+            readOnly: true
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "5m"
+          livenessProbe:
+            tcpSocket:
+              port: 8443
+          readinessProbe:
+            tcpSocket:
+              port: 8443

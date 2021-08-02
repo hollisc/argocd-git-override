@@ -1,0 +1,21 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: com.foo.whitelist-registry
+  annotations:
+    service.beta.openshift.io/inject-cabundle: "true"
+webhooks:
+- name: com.foo.whitelist-registry
+  rules:
+  - apiGroups:   [""]
+    apiVersions: ["v1"]
+    operations:  ["CREATE"]
+    resources:   ["pods"]
+    scope:       "Namespaced"
+  clientConfig:
+    service:
+      namespace: test
+      name: argocd-git-override
+      path: "/"
+  admissionReviewVersions: ["v1"]
+  sideEffects: None
