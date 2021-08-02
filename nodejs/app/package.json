@@ -4,10 +4,10 @@
     "description": "admission webhook",
     "main": "server.js",
     "scripts": {
-        "start": "./node_modules/.bin/nodemon server.js",
+        "start": "foobar server.js",
         "production": "node server.js",
-        "development": "./node_modules/.bin/nodemon server.js",
-        "debug": "./node_modules/.bin/nodemon --inspect=0.0.0.0 server.js",
+        "development": "foobar server.js",
+        "debug": "foobar --inspect=0.0.0.0 server.js",
         "lint": "standard --fix"
     },
     "license": "Apache-2.0",
