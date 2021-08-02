@@ -31,7 +31,7 @@ spec:
           secretName: argocd-git-override
       containers:
         - name: argocd-git-override
-          image: quay.io/csantanapr/argocd-git-override:9d7b64a-dirty@sha256:fa76a711ecc37de77fa03eacfb4f0e64a84da226090d49c95f8e871675a1c369
+          image: argocd-git-override
           ports:
             - containerPort: 8443
               name: https
