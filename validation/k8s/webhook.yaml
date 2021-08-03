@@ -1,11 +1,11 @@
 apiVersion: admissionregistration.k8s.io/v1
-kind: MutatingWebhookConfiguration
+kind: ValidatingWebhookConfiguration
 metadata:
-  name: argocd-git-override
+  name: com.foo.whitelist-registry
   annotations:
     service.beta.openshift.io/inject-cabundle: "true"
 webhooks:
-- name: argocd-git-override
+- name: com.foo.whitelist-registry
   namespaceSelector:
     matchExpressions:
     - key: cntk
@@ -13,14 +13,14 @@ webhooks:
       values:
       - experiment
   rules:
-  - apiGroups:   ["argoproj.io"]
-    apiVersions: ["v1alpha1"]
+  - apiGroups:   [""]
+    apiVersions: ["v1"]
     operations:  ["CREATE"]
-    resources:   ["applications"]
+    resources:   ["pods"]
     scope:       "Namespaced"
   clientConfig:
     service:
-      namespace: openshift-gitops
+      namespace: default
       name: argocd-git-override
       path: "/"
   admissionReviewVersions: ["v1"]
