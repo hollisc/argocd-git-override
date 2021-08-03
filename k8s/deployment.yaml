@@ -50,6 +50,9 @@ spec:
             requests:
               memory: "100Mi"
               cpu: "5m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"
           livenessProbe:
             tcpSocket:
               port: 8443

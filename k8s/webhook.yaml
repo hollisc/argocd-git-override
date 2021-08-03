@@ -5,7 +5,7 @@ metadata:
   annotations:
     service.beta.openshift.io/inject-cabundle: "true"
 webhooks:
-- name: argocd-git-override
+- name: dev.cloudnativetoolkit.argocd-git-override
   namespaceSelector:
     matchExpressions:
     - key: cntk
