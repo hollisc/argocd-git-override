@@ -11,6 +11,7 @@ data:
       ignoreDifferences: |
         jsonPointers:
         - /spec/source/targetRevision
+        - /spec/source/repoURL
 ```
 
 If using the ArgoCD operator then edit the instance of kinkd `ArgoCD`
@@ -22,4 +23,5 @@ spec:
       ignoreDifferences: |
         jsonPointers:
         - /spec/source/targetRevision
+        - /spec/source/repoURL
 ```
