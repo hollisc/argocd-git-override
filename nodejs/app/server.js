@@ -37,7 +37,7 @@ app.post('/', (req, res) => {
       break;
     }
   }
-  var response = {
+  var review = {
     apiVersion: 'admission.k8s.io/v1',
     kind: 'AdmissionReview',
     response: {
@@ -51,13 +51,14 @@ app.post('/', (req, res) => {
   }
   if(toPatch.length >0){
     const dataAsString = JSON.stringify(toPatch)
+    console.log("patch",dataAsString)
     const buff = Buffer.from(dataAsString.toString(), 'utf8')
     const patch = buff.toString('base64')
-    response.patchType = 'JSONPatch'
-    response.patch = patch
+    review.response.patchType = 'JSONPatch'
+    review.response.patch = patch
   }
-
-  res.send(response)
+  console.log("response",JSON.stringify(review, null, 2) )
+  res.send(review)
 })
 
 const server = https.createServer(options, app)
