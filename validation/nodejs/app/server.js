@@ -24,19 +24,19 @@ app.post('/', (req, res) => {
   const uid = req.body.request.uid;
   const object = req.body.request.object;
 
-  const whitelisted_registries_env = process.env.WHITELISTED_REGISTRIES;
-  const whitelisted_registries = whitelisted_registries_env.split(',');
+  const allowlisted_registries_env = process.env.allowlistED_REGISTRIES;
+  const allowlisted_registries = allowlisted_registries_env.split(',');
   for (var container of object.spec.containers) {
-      var whitelisted = false;
-      for (var reg of whitelisted_registries) {
+      var allowlisted = false;
+      for (var reg of allowlisted_registries) {
         if (container.image.startsWith(reg + '/')) {
-            whitelisted = true;
+            allowlisted = true;
         }
       }
-      if (!whitelisted) {
+      if (!allowlisted) {
           allowed = false;
           code = 403;
-          message = `${container.name} image comes from an untrusted registry! (${container.image}). Only images from ${whitelisted_registries_env} are allowed.`;
+          message = `${container.name} image comes from an untrusted registry! (${container.image}). Only images from ${allowlisted_registries_env} are allowed.`;
           break;
       }
   }
@@ -57,5 +57,5 @@ app.post('/', (req, res) => {
 const server = https.createServer(options, app);
 
 server.listen(port, () => {
-  console.log(`whitelist-regsitry controller running on port ${port}/`);
+  console.log(`allowlist-regsitry controller running on port ${port}/`);
 });

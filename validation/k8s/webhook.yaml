@@ -1,11 +1,11 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: com.foo.whitelist-registry
+  name: allow-list-registry
   annotations:
     service.beta.openshift.io/inject-cabundle: "true"
 webhooks:
-- name: com.foo.whitelist-registry
+- name: dev.cloudnativetoolkit.allow-list-registry
   namespaceSelector:
     matchExpressions:
     - key: cntk
@@ -21,7 +21,7 @@ webhooks:
   clientConfig:
     service:
       namespace: default
-      name: argocd-git-override
+      name: allow-list-registry
       path: "/"
   admissionReviewVersions: ["v1"]
   sideEffects: None

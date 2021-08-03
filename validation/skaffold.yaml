@@ -2,7 +2,7 @@ apiVersion: skaffold/v2beta20
 kind: Config
 build:
   artifacts:
-  - image: argocd-git-override
+  - image: allow-list-registry
     context: nodejs
 profiles:
 - name: dev
@@ -10,7 +10,7 @@ profiles:
   - command: dev
   build:
     artifacts:
-    - image: argocd-git-override
+    - image: allow-list-registry
       context: nodejs
       sync:
         infer:
@@ -23,11 +23,11 @@ profiles:
   - command: debug
   build:
     artifacts:
-    - image: argocd-git-override
+    - image: allow-list-registry
       context: nodejs
       sync:
         infer:
         - 'app/**/*.js'
       docker:
         buildArgs:
-          ENV: development
+          ENV: debug
