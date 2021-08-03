@@ -31,3 +31,4 @@ profiles:
       docker:
         buildArgs:
           ENV: development
+          IMAGE: node

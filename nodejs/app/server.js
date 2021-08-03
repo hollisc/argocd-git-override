@@ -24,28 +24,40 @@ app.post('/', (req, res) => {
   const uid = req.body.request.uid
   const object = req.body.request.object
   console.log(JSON.stringify(object.spec, null, 2)) // debug
+  let overrideMap = JSON.parse(fs.readFileSync('/config/map.json'))
 
-  const data = [
-    { op: 'replace', path: '/spec/source/repoURL', value: 'https://github.com/replaced/argocd-git-override.git' },
-    { op: 'replace', path: '/spec/source/targetRevision', value: 'replaced' }
-  ]
-  const dataAsString = JSON.stringify(data)
-  const buff = Buffer.from(dataAsString.toString(), 'utf8')
-  const patch = buff.toString('base64')
-  res.send({
+  var toPatch = [];
+  for (var gitRepo of overrideMap) {
+    if(gitRepo.upstreamRepoURL === object.spec.source.repoURL){
+      //we have a match for replace
+      toPatch.push({ op: 'replace', path: '/spec/source/repoURL', value: gitRepo.originRepoUrL })
+      if(gitRepo.originBranch){
+        toPatch.push({ op: 'replace', path: '/spec/source/targetRevision', value: gitRepo.originBranch })
+      }
+      break;
+    }
+  }
+  var response = {
     apiVersion: 'admission.k8s.io/v1',
     kind: 'AdmissionReview',
     response: {
       uid: uid,
       allowed: allowed,
-      patchType: 'JSONPatch',
-      patch: patch,
       status: {
         code: code,
         message: message
       }
     }
-  })
+  }
+  if(toPatch.length >0){
+    const dataAsString = JSON.stringify(toPatch)
+    const buff = Buffer.from(dataAsString.toString(), 'utf8')
+    const patch = buff.toString('base64')
+    response.patchType = 'JSONPatch'
+    response.patch = patch
+  }
+
+  res.send(response)
 })
 
 const server = https.createServer(options, app)

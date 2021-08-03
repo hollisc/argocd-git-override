@@ -45,21 +45,27 @@ spec:
       - name: certs
         secret:
           secretName: argocd-git-override
+      - name: config
+        configMap:
+          name: argocd-git-override
+          items:
+          - key: "map.json"
+            path: "map.json"
       containers:
         - name: argocd-git-override
           image: argocd-git-override
           ports:
             - containerPort: 8443
               name: https
-          env:
-          - name: WHITELISTED_REGISTRIES
-            value: "docker.io,gcr.io"
           envFrom:
             - secretRef:
                 name: argocd-git-override
           volumeMounts:
           - name: certs
             mountPath: "/certs"
+            readOnly: true
+          - name: config
+            mountPath: "/config"
             readOnly: true
           resources:
             requests:
