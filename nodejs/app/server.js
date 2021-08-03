@@ -24,20 +24,20 @@ app.post('/', (req, res) => {
   const uid = req.body.request.uid
   const object = req.body.request.object
   console.log(JSON.stringify(object.spec, null, 2)) // debug
-  let overrideMap = JSON.parse(fs.readFileSync('/config/map.json'))
+  const overrideMap = JSON.parse(fs.readFileSync('/config/map.json'))
 
-  var toPatch = [];
-  for (var gitRepo of overrideMap) {
-    if(gitRepo.upstreamRepoURL === object.spec.source.repoURL){
-      //we have a match for replace
+  const toPatch = []
+  for (const gitRepo of overrideMap) {
+    if (gitRepo.upstreamRepoURL === object.spec.source.repoURL) {
+      // we have a match for replace
       toPatch.push({ op: 'replace', path: '/spec/source/repoURL', value: gitRepo.originRepoUrL })
-      if(gitRepo.originBranch){
+      if (gitRepo.originBranch) {
         toPatch.push({ op: 'replace', path: '/spec/source/targetRevision', value: gitRepo.originBranch })
       }
-      break;
+      break
     }
   }
-  var review = {
+  const review = {
     apiVersion: 'admission.k8s.io/v1',
     kind: 'AdmissionReview',
     response: {
@@ -49,15 +49,14 @@ app.post('/', (req, res) => {
       }
     }
   }
-  if(toPatch.length >0){
+  if (toPatch.length > 0) {
     const dataAsString = JSON.stringify(toPatch)
-    console.log("patch",dataAsString)
     const buff = Buffer.from(dataAsString.toString(), 'utf8')
     const patch = buff.toString('base64')
     review.response.patchType = 'JSONPatch'
     review.response.patch = patch
   }
-  console.log("response",JSON.stringify(review, null, 2) )
+  console.log('response', JSON.stringify(review, null, 2))
   res.send(review)
 })
 
