@@ -24,7 +24,7 @@ app.post('/', (req, res) => {
   const uid = req.body.request.uid;
   const object = req.body.request.object;
 
-  const allowlisted_registries_env = process.env.allowlistED_REGISTRIES;
+  const allowlisted_registries_env = process.env.ALLOW_LISTED_REGISTRIES;
   const allowlisted_registries = allowlisted_registries_env.split(',');
   for (var container of object.spec.containers) {
       var allowlisted = false;
