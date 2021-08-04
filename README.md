@@ -56,6 +56,12 @@ You can avoid this by adding an ignoreDifference in the ArgoCD config, but when 
         originBranch: fork-branch
   ```
 
+- Activate webhook, by adding a label to the `openshift-gitops` namespace you deploy the webhook service
+  ```bash
+  oc label ns openshift-gitops cntk=experiment
+  ```
+
+
 ## Development
 
 - Change to the `openshift-gitops` namespace as context
