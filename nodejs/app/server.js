@@ -2,6 +2,7 @@ const express = require('express')
 const https = require('https')
 const fs = require('fs')
 const bodyParser = require('body-parser')
+const yaml = require('js-yaml');
 
 const app = express()
 app.use(bodyParser.json())
@@ -24,7 +25,8 @@ app.post('/', (req, res) => {
   const uid = req.body.request.uid
   const object = req.body.request.object
   console.log(JSON.stringify(object.spec, null, 2)) // debug
-  const overrideMap = JSON.parse(fs.readFileSync('/config/map.json'))
+  const overrideMap = yaml.load(fs.readFileSync('/config/map.yaml', 'utf8')).map;
+  console.log(JSON.stringify(overrideMap, null, 2)) // debug
 
   const toPatch = []
   for (const gitRepo of overrideMap) {
@@ -63,5 +65,5 @@ app.post('/', (req, res) => {
 const server = https.createServer(options, app)
 
 server.listen(port, () => {
-  console.log(`whitelist-regsitry controller running on port ${port}/`)
+  console.log(`whitelist-regsitry controller running on port ${port}/`) // debug
 })

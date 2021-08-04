@@ -3,11 +3,9 @@ kind: ConfigMap
 metadata:
   name: argocd-git-override
 data:
-  map.json: |-
-    [
-      {
-        "upstreamRepoURL": "https://github.com/csantanapr/argocd-git-override.git",
-        "originRepoUrL": "https://github.com/fork/argocd-git-override.git",
-        "originBranch": "fork-branch"
-      }
-    ]
+  map.yaml: |-
+    map:
+    - upstreamRepoURL: https://github.com/csantanapr/argocd-git-override.git
+      originRepoUrL: https://github.com/fork/argocd-git-override.git
+      originBranch: fork-branch
+

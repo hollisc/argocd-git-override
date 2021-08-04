@@ -49,8 +49,8 @@ spec:
         configMap:
           name: argocd-git-override
           items:
-          - key: "map.json"
-            path: "map.json"
+          - key: "map.yaml"
+            path: "map.yaml"
       containers:
         - name: argocd-git-override
           image: argocd-git-override
