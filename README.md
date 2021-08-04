@@ -30,7 +30,7 @@ You can avoid this by adding an `ignoreDifference` in the ArgoCD config, but whe
           - /spec/source/repoURL
   ```
 
-- Configure which git repository and/or branch/revision you would like to override. Create a configmap with an array of git repositories to match as upstream and replace with origin, usually your fork.
+- Configure which git repository and/or branch/revision you would like to override. Create a configmap with an array of git repositories to match an upstream and replace with your origin, usually a forked repo and branch.
   ```yaml
   cat <<EOF | oc apply -f -
   apiVersion: v1
