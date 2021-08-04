@@ -1,5 +1,5 @@
 {
-    "name": "app",
+    "name": "argocd-git-override",
     "version": "1.0.0",
     "description": "admission webhook",
     "main": "server.js",

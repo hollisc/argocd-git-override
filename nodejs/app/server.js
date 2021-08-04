@@ -65,5 +65,5 @@ app.post('/', (req, res) => {
 const server = https.createServer(options, app)
 
 server.listen(port, () => {
-  console.log(`whitelist-regsitry controller running on port ${port}/`) // debug
+  console.log(`argocd-git-override controller running on port ${port}/`) // debug
 })
