@@ -1,6 +1,9 @@
 # argocd-git-override
 Admission Controller to modify the git source for ArgoCD Applications
 
+The problem this webhooks solves is that when your woking with a parent ArgoCD Applications that deploy a child ArgoCD Applications, you might need to change something in the child ArgoCD Application using a fork repo, you can edit the CR of the child ArgoCD Application as the parent App will revert your edit.
+
+You can avoid this by adding an ignoreDifference in the ArgoCD config, but when your dealing with more than 20 ArgoCD Applications and between parent and childs, and a combination of git repositories it becomes hard to first find the correct ArgoCD corresponding to your git repo, this webhook allows you to create a simple mapping configmap to make sure that any any ArgoCD Application points to your fork repos, this avoid your fork repos being poluted with your git urls and keeping the upstream urls.
 
 
 ## Install
@@ -67,7 +70,7 @@ Admission Controller to modify the git source for ArgoCD Applications
 
 - Test in another terminal
   ```bash
-  oc create -f test/parent/argocd.yaml --dry-run=server -o yaml
+  oc create -f test/child/argocd.yaml --dry-run=server -o yaml
   ```
 
 
