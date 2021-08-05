@@ -15,8 +15,8 @@ webhooks:
   rules:
   - apiGroups:   ["argoproj.io"]
     apiVersions: ["v1alpha1"]
-    operations:  ["CREATE"]
-    resources:   ["applications"]
+    operations:  ["CREATE","UPDATE"]
+    resources:   ["applications","appprojects"]
     scope:       "Namespaced"
   clientConfig:
     service:
