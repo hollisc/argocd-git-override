@@ -85,9 +85,14 @@ You can avoid this by adding an `ignoreDifference` in the ArgoCD config, but whe
   skaffold dev
   ```
 
-- Test in another terminal
+- Test in another terminal to create an ArgoCD Application
   ```bash
   oc create -f test/child/argocd.yaml --dry-run=server -o yaml
+  ```
+
+- Test in another terminal to create an ArgoCD Project
+  ```bash
+  oc create -f test/parent/argocd-project.yaml --dry-run=server -o yaml
   ```
 
 - To debug delete the quota in the `openshift-gitops` then run debug
