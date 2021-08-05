@@ -11,7 +11,7 @@ You can avoid this by adding an `ignoreDifference` in the ArgoCD config, but whe
 - If not using ArgoCD operator edit the `argocd-cm` configMap
   ```yaml
   data:
-    resourceCustomizations: |
+    resource.customizations: |
       argoproj.io/Application:
         ignoreDifferences: |
           jsonPointers:
