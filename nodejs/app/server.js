@@ -2,7 +2,7 @@ const express = require('express')
 const https = require('https')
 const fs = require('fs')
 const bodyParser = require('body-parser')
-const yaml = require('js-yaml');
+const yaml = require('js-yaml')
 
 const app = express()
 app.use(bodyParser.json())
@@ -24,21 +24,36 @@ app.post('/', (req, res) => {
   const message = ''
   const uid = req.body.request.uid
   const object = req.body.request.object
-  console.log(JSON.stringify(object.spec, null, 2)) // debug
-  const overrideMap = yaml.load(fs.readFileSync('/config/map.yaml', 'utf8')).map;
+  console.log('#############################################')
+  console.log(JSON.stringify(req.body.request, null, 2)) // debug
+  const overrideMap = yaml.load(fs.readFileSync('/config/map.yaml', 'utf8')).map
   console.log(JSON.stringify(overrideMap, null, 2)) // debug
 
   const toPatch = []
-  for (const gitRepo of overrideMap) {
-    if (gitRepo.upstreamRepoURL === object.spec.source.repoURL) {
-      // we have a match for replace
-      toPatch.push({ op: 'replace', path: '/spec/source/repoURL', value: gitRepo.originRepoUrL })
-      if (gitRepo.originBranch) {
-        toPatch.push({ op: 'replace', path: '/spec/source/targetRevision', value: gitRepo.originBranch })
+  if (object.kind === 'Application') {
+    for (const gitRepo of overrideMap) {
+      if (object.spec.source && gitRepo.upstreamRepoURL === object.spec.source.repoURL) {
+        // we have a match for replace
+        toPatch.push({ op: 'replace', path: '/spec/source/repoURL', value: gitRepo.originRepoUrL })
+        if (gitRepo.originBranch) {
+          toPatch.push({ op: 'replace', path: '/spec/source/targetRevision', value: gitRepo.originBranch })
+        }
+        break
       }
-      break
+    }
+  } else if (object.kind === 'AppProject') {
+    console.log('got a project')
+    for (const gitRepo of overrideMap) {
+      for (const index in object.spec.sourceRepos) {
+        if (gitRepo.upstreamRepoURL === object.spec.sourceRepos[index]) {
+          // we have a match for replace
+          toPatch.push({ op: 'replace', path: `/spec/sourceRepos/${index}`, value: gitRepo.originRepoUrL })
+          break
+        }
+      }
     }
   }
+
   const review = {
     apiVersion: 'admission.k8s.io/v1',
     kind: 'AdmissionReview',

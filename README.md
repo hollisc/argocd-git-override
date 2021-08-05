@@ -11,12 +11,16 @@ You can avoid this by adding an `ignoreDifference` in the ArgoCD config, but whe
 - If not using ArgoCD operator edit the `argocd-cm` configMap
   ```yaml
   data:
-    resource.customizations: |
+    resourceCustomizations: |
       argoproj.io/Application:
         ignoreDifferences: |
           jsonPointers:
           - /spec/source/targetRevision
           - /spec/source/repoURL
+      argoproj.io/AppProject:
+        ignoreDifferences: |
+          jsonPointers:
+          - /spec/sourceRepos
   ```
 
 - If using the ArgoCD operator then edit the instance of kind `ArgoCD`
@@ -28,6 +32,10 @@ You can avoid this by adding an `ignoreDifference` in the ArgoCD config, but whe
           jsonPointers:
           - /spec/source/targetRevision
           - /spec/source/repoURL
+      argoproj.io/AppProject:
+        ignoreDifferences: |
+          jsonPointers:
+          - /spec/sourceRepos
   ```
 
 - Configure which git repository and/or branch/revision you would like to override. Create a configmap with an array of git repositories to match an upstream and replace with your origin, usually a forked repo and branch.
@@ -49,12 +57,12 @@ You can avoid this by adding an `ignoreDifference` in the ArgoCD config, but whe
 
 - Deploy the deployment and service to OpenShift in the `openshift-gitops` namespace, or another namespace
   ```bash
-  oc create -n openshift-gitops  -f https://github.com/csantanapr/argocd-git-override/releases/download/v1.0.0/deployment.yaml
+  oc create -n openshift-gitops  -f https://github.com/csantanapr/argocd-git-override/releases/download/v1.1.0/deployment.yaml
   ```
 
 - Deploy the  `MutatingWebhookConfiguration`, edit the yaml to specify a different namespace for the target service if you used a different namespace than `openshift-gitops` replace it with the namespace used in the previous step
   ```bash
-  oc create -f https://github.com/csantanapr/argocd-git-override/releases/download/v1.0.0/webhook.yaml
+  oc create -f https://github.com/csantanapr/argocd-git-override/releases/download/v1.1.0/webhook.yaml
   ```
 
 
@@ -82,6 +90,13 @@ You can avoid this by adding an `ignoreDifference` in the ArgoCD config, but whe
   oc create -f test/child/argocd.yaml --dry-run=server -o yaml
   ```
 
-
+- To debug delete the quota in the `openshift-gitops` then run debug
+  ```bash
+  oc delete quota openshift-gitops-compute-resources -n openshift-gitops
+  ```
+  ```bash
+  skaffold debug
+  ```
+  Then you would be able to attach a nodejs debugger
 
 
