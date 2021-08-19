@@ -20,7 +20,7 @@ webhooks:
     scope:       "Namespaced"
   clientConfig:
     service:
-      namespace: openshift-gitops
+      namespace: tools
       name: argocd-git-override
       path: "/"
   admissionReviewVersions: ["v1"]
